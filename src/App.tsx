@@ -48,6 +48,9 @@ import { ExamsModule } from "@/modules/ExamsModule";
 import { ParentCommunicationModule } from "@/modules/ParentCommunicationModule";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { AIAssistantWidget } from "@/components/AIAssistantWidget";
+import { PrinterStatusBar } from "@/components/PrinterStatusBar";
+import { PrintToast } from "@/components/PrinterStatusBar";
+import { useDesktopShortcuts } from "@/lib/useDesktopShortcuts";
 
 type ModuleKey =
   | "dashboard"
@@ -106,11 +109,25 @@ export default function App() {
   const [schoolSwitcherOpen, setSchoolSwitcherOpen] = useState(false);
   const [now, setNow] = useState(new Date());
   const [activeLabel, setActiveLabel] = useState("Dashboard");
+  const [printResult, setPrintResult] = useState<{ ok: boolean; error?: string } | null>(null);
 
   useEffect(() => {
     const t = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(t);
   }, []);
+
+  const navigateTo = (m: ModuleKey, label?: string) => {
+    setActive(m);
+    setActiveLabel(label ?? NAV.find((n) => n.key === m)?.label ?? m);
+    setMobileNavOpen(false);
+  };
+
+  useDesktopShortcuts({
+    "goto-attendance": () => navigateTo("attendance", "Class Attendance"),
+    "goto-fees": () => navigateTo("finance", "Finance & Fees"),
+    "goto-communication": () => navigateTo("communication", "Parent Communication"),
+    print: () => window.print(),
+  });
 
   const grouped = GROUP_ORDER.map((g) => ({
     group: g,
@@ -123,7 +140,7 @@ export default function App() {
   const renderModule = () => {
     switch (active) {
       case "dashboard":
-        return <Dashboard onNavigate={(m) => { setActive(m); setActiveLabel(NAV.find((n) => n.key === m)?.label ?? m); }} />;
+        return <Dashboard onNavigate={(m) => navigateTo(m)} />;;
       case "students":
         return <StudentsModule />;
       case "finance":
@@ -227,6 +244,12 @@ export default function App() {
         <div className="px-5 py-3 border-t border-slate-800 text-[11px] text-slate-500">
           <p>Academic Year 2026–2027</p>
           <p className="mt-0.5 text-slate-600">v1.0 · Supabase</p>
+          <div className="mt-2 space-y-0.5 text-slate-400">
+            <p><kbd className="font-mono text-[10px] bg-slate-800 rounded px-1">Ctrl+Shift+A</kbd> Attendance</p>
+            <p><kbd className="font-mono text-[10px] bg-slate-800 rounded px-1">Ctrl+Shift+F</kbd> Fee Collection</p>
+            <p><kbd className="font-mono text-[10px] bg-slate-800 rounded px-1">Ctrl+Shift+M</kbd> Broadcast</p>
+            <p><kbd className="font-mono text-[10px] bg-slate-800 rounded px-1">Ctrl+P</kbd> Print</p>
+          </div>
         </div>
       </aside>
 
@@ -298,6 +321,8 @@ export default function App() {
                 <AlertPill tone="error" icon={<Receipt size={13} />} label="Fees Rx" />
               </div>
 
+              <PrinterStatusBar />
+
               {/* Language */}
               <LanguageToggle />
 
@@ -315,7 +340,7 @@ export default function App() {
           </div>
         </header>
 
-        <main className="flex-1 overflow-x-hidden p-4 sm:p-6 lg:p-8">
+        <main className="flex-1 overflow-x-hidden p-4 sm:p-6 lg:p-8 xl:max-w-[1600px] xl:mx-auto w-full">
           <div className="mb-5">
             <h1 className="text-xl sm:text-2xl font-semibold text-slate-900">{activeLabel}</h1>
             <p className="text-sm text-slate-500 mt-0.5">
@@ -327,6 +352,7 @@ export default function App() {
       </div>
 
       <AIAssistantWidget />
+      <PrintToast result={printResult} onDismiss={() => setPrintResult(null)} />
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Bus, QrCode, X, Phone, Check, AlertTriangle, MapPin, Users, Loader2, Navigation, CloudUpload, Wifi, WifiOff, LogOut, LogIn } from "lucide-react";
+import { QrCode, X, Phone, Check, AlertTriangle, MapPin, Users, Loader2, Navigation, CloudUpload, Wifi, WifiOff, LogOut, LogIn, Clock } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import type { Bus, BusRoute, StudentBusMapping } from "@/types/db";
 import { useLookups } from "@/lib/useLookups";
@@ -44,7 +44,7 @@ export function DriverMobilePortal() {
   const [tripStartedAt, setTripStartedAt] = useState<string | null>(null);
 
   const buses = lookups?.buses ?? [];
-  const routes = useMemo(() => (lookups?.routes ?? []).filter((r) => r.bus_id === busId), [lookups, busId]);
+  const routes = useMemo(() => (lookups?.busRoutes ?? []).filter((r) => r.bus_id === busId), [lookups, busId]);
 
   useEffect(() => {
     if (!busId) {
@@ -81,7 +81,7 @@ export function DriverMobilePortal() {
     const admissionNo = text.startsWith("STUDENT:") ? text.replace("STUDENT:", "") : text;
     const mapping = mappings.find((m) => m.students?.admission_no === admissionNo);
     if (!mapping) {
-      setScanLog((prev) => [{ mapping_id: "", student_name: `Unknown: ${admissionNo}`, admission_no, status: "pending", timestamp: new Date().toISOString(), stop: "—" }, ...prev].slice(0, 50));
+      setScanLog((prev) => [{ mapping_id: "", student_name: `Unknown: ${admissionNo}`, admission_no: admissionNo, status: "pending" as BoardingStatus, timestamp: new Date().toISOString(), stop: "—" }, ...prev].slice(0, 50));
       return;
     }
     const currentStatus = boardingMap.get(mapping.id) ?? "pending";
@@ -372,6 +372,3 @@ function DriverStat({ label, value, icon, tone }: { label: string; value: number
     </div>
   );
 }
-
-// Re-export Clock icon used above
-import { Clock } from "lucide-react";

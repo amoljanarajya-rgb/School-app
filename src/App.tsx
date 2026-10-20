@@ -34,6 +34,8 @@ import {
   ClipboardCheck,
   CalendarCheck,
   Bus,
+  Smartphone,
+  Truck,
 } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { Dashboard } from "@/modules/Dashboard";
@@ -46,6 +48,8 @@ import { ClassAttendanceModule } from "@/modules/ClassAttendanceModule";
 import { TransportModule } from "@/modules/TransportModule";
 import { ExamsModule } from "@/modules/ExamsModule";
 import { ParentCommunicationModule } from "@/modules/ParentCommunicationModule";
+import { TeacherMobilePortal } from "@/modules/TeacherMobilePortal";
+import { DriverMobilePortal } from "@/modules/DriverMobilePortal";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { AIAssistantWidget } from "@/components/AIAssistantWidget";
 import { PrinterStatusBar } from "@/components/PrinterStatusBar";
@@ -62,7 +66,9 @@ type ModuleKey =
   | "attendance"
   | "transport"
   | "exams"
-  | "communication";
+  | "communication"
+  | "teacher-portal"
+  | "driver-portal";
 
 type NavItem = { key: ModuleKey; label: string; icon: React.ReactNode; group: string };
 
@@ -87,6 +93,10 @@ const NAV: NavItem[] = [
   { key: "dashboard", label: "QR Code Attendance", icon: <QrCode size={17} />, group: "MANAGEMENT" },
   { key: "dashboard", label: "Assessment", icon: <Award size={17} />, group: "MANAGEMENT" },
 
+  // MOBILE PORTALS
+  { key: "teacher-portal", label: "Teacher Portal", icon: <Smartphone size={17} />, group: "MOBILE PORTALS" },
+  { key: "driver-portal", label: "Driver Portal", icon: <Truck size={17} />, group: "MOBILE PORTALS" },
+
   // MODULES
   { key: "dashboard", label: "Study Center", icon: <BookOpen size={17} />, group: "MODULES" },
   { key: "dashboard", label: "Certificates", icon: <Award size={17} />, group: "MODULES" },
@@ -101,7 +111,7 @@ const NAV: NavItem[] = [
   { key: "api", label: "Settings", icon: <Settings size={17} />, group: "MODULES" },
 ];
 
-const GROUP_ORDER = ["Overview", "MANAGEMENT", "MODULES"];
+const GROUP_ORDER = ["Overview", "MANAGEMENT", "MOBILE PORTALS", "MODULES"];
 
 export default function App() {
   const [active, setActive] = useState<ModuleKey>("dashboard");
@@ -157,6 +167,10 @@ export default function App() {
         return <ExamsModule />;
       case "communication":
         return <ParentCommunicationModule />;
+      case "teacher-portal":
+        return <TeacherMobilePortal />;
+      case "driver-portal":
+        return <DriverMobilePortal />;
       case "api":
         return <ApiDocsModule />;
     }

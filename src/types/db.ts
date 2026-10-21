@@ -349,3 +349,181 @@ export type ParentNotification = {
   created_at?: string;
   updated_at?: string;
 };
+
+// ── Timetable ──
+
+export type TimetableEntry = {
+  id: string;
+  class_id: string;
+  section_id?: string | null;
+  teacher_id: string;
+  subject: string;
+  day_of_week: number;
+  period: number;
+  start_time: string;
+  end_time: string;
+  room_no?: string | null;
+  is_break: boolean;
+  created_at?: string;
+  updated_at?: string;
+};
+
+export type TimetableSubstitution = {
+  id: string;
+  timetable_entry_id: string;
+  original_teacher_id: string;
+  substitute_teacher_id: string;
+  date: string;
+  reason?: string | null;
+  status: "Assigned" | "Accepted" | "Declined" | "Completed";
+  created_at?: string;
+  updated_at?: string;
+};
+
+// ── Library Issue ──
+
+export type BookIssue = {
+  id: string;
+  book_id: string;
+  student_id?: string | null;
+  staff_id?: string | null;
+  borrower_name: string;
+  borrower_type: "Student" | "Staff";
+  isbn?: string | null;
+  barcode?: string | null;
+  issue_date: string;
+  due_date: string;
+  return_date?: string | null;
+  late_fine: number;
+  fine_paid: boolean;
+  status: "Issued" | "Returned" | "Overdue" | "Lost";
+  remarks?: string | null;
+  created_at?: string;
+  updated_at?: string;
+};
+
+// ── Certificates & ID Cards ──
+
+export type CertificateRequest = {
+  id: string;
+  student_id: string;
+  certificate_type: "TransferCertificate" | "BonafideCertificate" | "CharacterCertificate";
+  reason?: string | null;
+  issued_date: string;
+  certificate_no: string;
+  status: "Generated" | "Printed" | "Cancelled";
+  issued_by?: string | null;
+  remarks?: string | null;
+  created_at?: string;
+  updated_at?: string;
+};
+
+export type IdCardRequest = {
+  id: string;
+  person_type: "Student" | "Staff";
+  student_id?: string | null;
+  staff_id?: string | null;
+  card_type: "IdentityCard" | "BusPass" | "LibraryCard";
+  generated_date: string;
+  status: "Generated" | "Printed" | "Reissued";
+  template_name?: string | null;
+  created_at?: string;
+  updated_at?: string;
+};
+
+// ── Inventory ──
+
+export type InventoryItem = {
+  id: string;
+  name: string;
+  category: "Uniform" | "Book" | "Stationery" | "Sports" | "Other";
+  sku?: string | null;
+  barcode?: string | null;
+  size?: string | null;
+  color?: string | null;
+  unit_price: number;
+  cost_price: number;
+  stock_qty: number;
+  reorder_level: number;
+  unit: string;
+  created_at?: string;
+  updated_at?: string;
+};
+
+export type InventorySale = {
+  id: string;
+  bill_no: string;
+  customer_name: string;
+  customer_phone?: string | null;
+  items: Array<{ item_id: string; name: string; qty: number; price: number }>;
+  subtotal: number;
+  discount: number;
+  tax: number;
+  total: number;
+  payment_method: string;
+  sale_date: string;
+  served_by?: string | null;
+  created_at?: string;
+  updated_at?: string;
+};
+
+// ── Hostel ──
+
+export type HostelRoom = {
+  id: string;
+  room_no: string;
+  block_name: string;
+  floor: number;
+  capacity: number;
+  current_occupancy: number;
+  room_type: "Single" | "Shared" | "Dormitory";
+  monthly_fee: number;
+  status: "Available" | "Full" | "Maintenance";
+  created_at?: string;
+  updated_at?: string;
+};
+
+export type HostelAllocation = {
+  id: string;
+  student_id: string;
+  room_id: string;
+  allocation_date: string;
+  vacate_date?: string | null;
+  status: "Active" | "Vacated" | "Suspended";
+  mess_included: boolean;
+  created_at?: string;
+  updated_at?: string;
+};
+
+export type HostelFee = {
+  id: string;
+  student_id: string;
+  allocation_id?: string | null;
+  amount: number;
+  payment_date: string;
+  period_month: number;
+  period_year: number;
+  payment_method: string;
+  receipt_no?: string | null;
+  status: "Paid" | "Pending" | "Overdue";
+  created_at?: string;
+  updated_at?: string;
+};
+
+export type GatePass = {
+  id: string;
+  student_id: string;
+  pass_type: "Exit" | "Entry" | "Outing" | "Home Visit";
+  requested_by: string;
+  approved_by?: string | null;
+  out_date: string;
+  expected_return?: string | null;
+  actual_return?: string | null;
+  reason: string;
+  destination?: string | null;
+  contact_person?: string | null;
+  contact_phone?: string | null;
+  status: "Pending" | "Approved" | "Rejected" | "Completed" | "Expired";
+  created_at?: string;
+  updated_at?: string;
+};

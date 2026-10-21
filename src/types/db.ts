@@ -213,6 +213,7 @@ export type Room = {
 export type LibraryBook = {
   id: string;
   isbn?: string | null;
+  barcode?: string | null;
   title: string;
   author?: string | null;
   publisher?: string | null;
@@ -220,6 +221,7 @@ export type LibraryBook = {
   total_copies: number;
   available_copies: number;
   shelf_location?: string | null;
+  edition?: string | null;
   created_at?: string;
   updated_at?: string;
 };

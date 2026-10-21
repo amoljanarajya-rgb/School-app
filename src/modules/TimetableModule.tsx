@@ -33,7 +33,7 @@ export function TimetableModule() {
   const [absentTeacher, setAbsentTeacher] = useState("");
   const [subDate, setSubDate] = useState(new Date().toISOString().slice(0, 10));
   const [availableTeachers, setAvailableTeachers] = useState<{ id: string; full_name: string }[]>([]);
-  const [busySlots, setBusySlots] = useState<Set<string>>(new Set());
+  const [busySlots, setBusySlots] = useState<Set<number>>(new Set());
 
   const teachingStaff = useMemo(
     () => (lookups?.staff ?? []).filter((s) => s.staff_type === "Teaching"),

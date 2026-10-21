@@ -36,6 +36,11 @@ import {
   Bus,
   Smartphone,
   Truck,
+  CalendarRange,
+  Library,
+  ScrollText,
+  Package,
+  Home,
 } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { Dashboard } from "@/modules/Dashboard";
@@ -50,6 +55,11 @@ import { ExamsModule } from "@/modules/ExamsModule";
 import { ParentCommunicationModule } from "@/modules/ParentCommunicationModule";
 import { TeacherMobilePortal } from "@/modules/TeacherMobilePortal";
 import { DriverMobilePortal } from "@/modules/DriverMobilePortal";
+import { TimetableModule } from "@/modules/TimetableModule";
+import { LibraryModule } from "@/modules/LibraryModule";
+import { CertificatesModule } from "@/modules/CertificatesModule";
+import { InventoryModule } from "@/modules/InventoryModule";
+import { HostelModule } from "@/modules/HostelModule";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { AIAssistantWidget } from "@/components/AIAssistantWidget";
 import { PrinterStatusBar } from "@/components/PrinterStatusBar";
@@ -68,7 +78,12 @@ type ModuleKey =
   | "exams"
   | "communication"
   | "teacher-portal"
-  | "driver-portal";
+  | "driver-portal"
+  | "timetable"
+  | "library"
+  | "certificates"
+  | "inventory"
+  | "hostel";
 
 type NavItem = { key: ModuleKey; label: string; icon: React.ReactNode; group: string };
 
@@ -88,6 +103,7 @@ const NAV: NavItem[] = [
   { key: "dashboard", label: "Online Examinations", icon: <GradIcon size={17} />, group: "MANAGEMENT" },
   { key: "hr", label: "Human Resource", icon: <UserCog size={17} />, group: "MANAGEMENT" },
   { key: "dashboard", label: "PTM Meetings", icon: <CalendarDays size={17} />, group: "MANAGEMENT" },
+  { key: "timetable", label: "Timetable & Proxy", icon: <CalendarRange size={17} />, group: "MANAGEMENT" },
   { key: "dashboard", label: "Lesson Planner", icon: <PencilRuler size={17} />, group: "MANAGEMENT" },
   { key: "dashboard", label: "OSM Module", icon: <ClipboardCheck size={17} />, group: "MANAGEMENT" },
   { key: "dashboard", label: "QR Code Attendance", icon: <QrCode size={17} />, group: "MANAGEMENT" },
@@ -99,7 +115,10 @@ const NAV: NavItem[] = [
 
   // MODULES
   { key: "dashboard", label: "Study Center", icon: <BookOpen size={17} />, group: "MODULES" },
-  { key: "dashboard", label: "Certificates", icon: <Award size={17} />, group: "MODULES" },
+  { key: "library", label: "Library & Barcode", icon: <Library size={17} />, group: "MODULES" },
+  { key: "certificates", label: "Certificates & ID Cards", icon: <ScrollText size={17} />, group: "MODULES" },
+  { key: "inventory", label: "Inventory & Store", icon: <Package size={17} />, group: "MODULES" },
+  { key: "hostel", label: "Hostel & Mess", icon: <Home size={17} />, group: "MODULES" },
   { key: "dashboard", label: "Communicate", icon: <MessageSquare size={17} />, group: "MODULES" },
   { key: "communication", label: "Parent Communication", icon: <MessageSquare size={17} />, group: "MODULES" },
   { key: "transport", label: "Transport & Buses", icon: <Bus size={17} />, group: "MODULES" },
@@ -171,6 +190,16 @@ export default function App() {
         return <TeacherMobilePortal />;
       case "driver-portal":
         return <DriverMobilePortal />;
+      case "timetable":
+        return <TimetableModule />;
+      case "library":
+        return <LibraryModule />;
+      case "certificates":
+        return <CertificatesModule />;
+      case "inventory":
+        return <InventoryModule />;
+      case "hostel":
+        return <HostelModule />;
       case "api":
         return <ApiDocsModule />;
     }
